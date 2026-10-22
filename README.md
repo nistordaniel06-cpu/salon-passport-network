@@ -1,5 +1,14 @@
 # Salon Passport
 
+## Demo online
+
+[Deschide aplicația](https://nistordaniel06-cpu.github.io/salon-passport-network/) · selectează Client, PRO sau Admin din bara de sus.
+
+GitHub Pages prezintă aceeași interfață folosind un simulator local, cu date fictive în browser. Nu există autentificare reală, sincronizare între dispozitive sau validare securizată a codurilor în acest demo. Nu introduce date reale. Butonul Resetează reface demonstrația. Serverul complet rămâne separat, cu SQLite și verificări server-side.
+
+Build demo: `node scripts/build-preview.mjs`. Publicarea este automată din main prin workflow-ul Publish interactive demo.
+
+
 **Descoperă. Rezervă. Revino.** Un pilot funcțional pentru a transforma vizita din salon în următoarea programare.
 
 Pașaport privat al stilului, rezervări, check-in QR temporar, confirmarea serviciului, puncte pe salon și repetarea look-ului. Trei intrări separate: `/client`, `/pro`, `/admin`.

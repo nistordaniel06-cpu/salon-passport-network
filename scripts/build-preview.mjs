@@ -1,0 +1,15 @@
+import {mkdir,readFile,writeFile,copyFile} from 'node:fs/promises';
+import {openStore} from '../lib/store.mjs';
+import QRCode from 'qrcode';
+const out='pages';await mkdir(out,{recursive:true});
+const store=openStore();store.seedDemo();const users=store.db.prepare('SELECT id,name,email,role FROM users').all();
+const seed={users,...store.state(users[0]),audit:[],tokens:{}};delete seed.user;
+await writeFile(`${out}/seed.json`,JSON.stringify(seed));store.close();
+const codes={};for(const kind of ['visit','reward']){const payload=`SP1:${kind}:demonstration-local-${kind}-passport`;codes[kind]={payload,qr:await QRCode.toDataURL(payload,{width:280,margin:3})};}await writeFile(`${out}/codes.json`,JSON.stringify(codes));
+for(const file of ['style.css','icon.svg'])await copyFile(`public/${file}`,`${out}/${file}`);
+let js=await readFile('public/app.js','utf8');js=js.replace("const portal=location.pathname==='/pro'?'pro':location.pathname==='/admin'?'admin':'client';","const portal=['client','pro','admin'].includes(new URLSearchParams(location.search).get('role'))?new URLSearchParams(location.search).get('role'):'client';");
+js=js.replace('async function api(path,body){','async function api(path,body){return previewApi(path,body);}\nasync function serverApiUnused(path,body){').replaceAll('href="/${portal}"','href="?role=${portal}"').replaceAll('href="/${e(state.user.role)}"','href="?role=${e(state.user.role)}"').replaceAll('src="/icon.svg"','src="./icon.svg"');
+js=js.replace('init();','init();');await writeFile(`${out}/app.js`,"import {previewApi} from './preview-api.js';\n"+js);
+await copyFile('preview/preview-api.js',`${out}/preview-api.js`);
+let html=await readFile('public/index.html','utf8');html=html.replaceAll('href="/','href="./').replaceAll('src="/','src="./').replace('<link rel="manifest" href="./manifest.webmanifest">','');html=html.replace('<div id="app">',`<div class="preview-bar"><span>DEMO · date locale fictive</span><nav><a href="?role=client">Client</a><a href="?role=pro">PRO</a><a href="?role=admin">Admin</a><button id="reset-demo">Resetează</button></nav></div><div id="app">`);await writeFile(`${out}/index.html`,html);await writeFile(`${out}/.nojekyll`,'');
+await writeFile(`${out}/style.css`,(await readFile(`${out}/style.css`,'utf8'))+'\n.preview-bar{position:sticky;top:0;z-index:50;background:#102544;color:white;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;gap:8px;font:12px system-ui;flex-wrap:wrap}.preview-bar nav{display:flex;gap:14px;align-items:center}.preview-bar a{color:white;font-weight:700}.preview-bar button{background:#fff;color:#102544;padding:5px 9px;border-radius:6px;font-size:12px}.sidebar{top:48px}.preview-bar+ #app{min-height:90vh}');
