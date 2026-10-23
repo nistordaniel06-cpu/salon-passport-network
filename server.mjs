@@ -46,10 +46,13 @@ export function createApp({database=':memory:',demo=false,origin='',adminEmail='
    if(path==='/api/auth/logout'&&req.method==='POST'){store.logout(cookies.sp_session);res.setHeader('Set-Cookie','sp_session=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0');return send(200,{ok:true});}
    if(!user)throw new Fault('Autentifică-te pentru a continua.',401);
    if(path==='/api/state'&&req.method==='GET')return send(200,store.state(user));
+   if(path==='/api/pro/slots'&&req.method==='GET')return send(200,store.proSlots(user,{visitId:Number(url.searchParams.get('visit')),serviceId:Number(url.searchParams.get('service')),date:url.searchParams.get('date')}));
    if(path==='/api/slots'&&req.method==='GET')return send(200,store.slots(Number(url.searchParams.get('staff')),url.searchParams.get('date'),Number(url.searchParams.get('service'))||undefined));
    if(req.method!=='POST')throw new Fault('Ruta nu există.',404);
    let result;
    switch(path) {
+    case '/api/pro/visits/edit':result=store.editVisit(user,b);break;
+    case '/api/pro/visits/cancel':result=store.proCancel(user,b);break;
     case '/api/schedule':result=store.setHours(user,b);break;
     case '/api/timeoff':result=store.addTimeOff(user,b);break;
     case '/api/timeoff/remove':result=store.removeTimeOff(user,Number(b.id));break;

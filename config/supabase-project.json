@@ -1,0 +1,7 @@
+{
+  "projectRef": "nepdywsvyxffnluixair",
+  "organizationId": "hqargqycaqgyqdvoetpo",
+  "region": "eu-central-1",
+  "status": "provisioned-not-connected",
+  "note": "Dedicated project created. App still uses SQLite server or browser-local demo. No production client data has been migrated."
+}

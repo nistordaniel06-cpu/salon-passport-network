@@ -50,7 +50,7 @@ npm run check
 npm test
 ```
 
-20 teste acoperă izolarea dintre clienți/saloane, rolurile, replay/expirare QR, finalizare idempotentă, rezervări concurente la nivel tranzacțional, recompense, fotografii, sesiuni persistente și API HTTP cu control de origine. Workflow GitHub Actions inclus.
+22 teste acoperă izolarea dintre clienți/saloane, rolurile, replay/expirare QR, finalizare idempotentă, rezervări concurente la nivel tranzacțional, recompense, fotografii, sesiuni persistente și API HTTP cu control de origine. Workflow GitHub Actions inclus.
 
 ## Test manual în cinci pași
 
@@ -85,3 +85,9 @@ Vezi [arhitectura](docs/ARCHITECTURE.md), [roadmap](docs/ROADMAP.md) și [verifi
 PRO → Program configurează cele șapte zile și pauzele. Ore implicite: luni–sâmbătă 09–18, pauză 13–13:30; duminică închis. Acestea sunt valori de pornire, nu programul real confirmat al 4MEN. Modificarea orarului nu anulează programările existente. Blocările sunt respinse dacă intersectează programări active. Admin stabilește durata la adăugarea unui serviciu. Durata rezervării se salvează separat pentru a păstra istoricul.
 
 Publicarea serverului real și configurarea identității proprietarului rămân neefectuate. GitHub Pages continuă să fie doar simulatorul local.
+
+## Calendar PRO
+
+Agenda are vedere Zi, 7 zile și Listă, selector de dată și revenire la Astăzi. Atinge programarea pentru detalii. Specialistul poate modifica data, ora și serviciul doar pentru propriile programări neîncepute. Salvarea reverifică disponibilitatea într-o tranzacție, respinge editările bazate pe date vechi și invalidează QR-ul anterior. Anularea eliberează intervalul și se păstrează în audit. Pauzele și blocările sunt afișate în calendar. Nu sunt activate sincronizarea cu Google/MERO, notificările automate sau drag-and-drop.
+
+Proiect Supabase dedicat: `nepdywsvyxffnluixair`, Frankfurt. Doar provisionat; nu este încă legat de autentificarea sau datele aplicației.
