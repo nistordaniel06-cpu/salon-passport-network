@@ -4,10 +4,15 @@
 
 Cont client, pașaport privat, rezervare, QR temporar, check-in, finalizare, puncte, recompense, look salvat, reprogramare, rol PRO, configurare Admin și indicatori. Fiecare element este susținut de stocare pe server.
 
+## Livrat în versiunea calendar
+
+Program săptămânal, pauze, concedii/blocări fără suprapuneri, durate variabile și prima pagină compactă. Implementate pe server și în simulator; serverul real nu este încă găzduit.
+
 ## Următoarea versiune pentru pilot real
 
 - Recuperare parolă, email verificat, schimbare parolă sigură, export și ștergere date.
-- Orar real, pauze/concedii, durate variabile și roluri owner/manager cu autorizare explicită.
+- Roluri owner/manager cu autorizare explicită.
+- Publicarea serverului real, recuperare cont și validare cu proprietarul 4MEN.
 - QR public al salonului cu intrare directă în profil și activarea pașaportului.
 - Reprogramare cu recomandarea intervalului personal, statistici pe cohorte și perioade.
 - Administrarea/editarea/dezactivarea serviciilor și echipei cu păstrarea istoricului prețurilor.

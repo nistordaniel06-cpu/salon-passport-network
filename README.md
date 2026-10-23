@@ -31,7 +31,7 @@ Conturi fictive: `client@demo.local`, `pro@demo.local`, `pro2@demo.local`, `admi
 - Înregistrare client, login cu parolă hash-uită scrypt, sesiuni persistente HttpOnly.
 - Server Node și bază SQLite, fără servicii externe obligatorii.
 - Descoperire saloane; alegere serviciu, profesionist și interval; anulare.
-- Sloturi de 60 minute, 09:00–18:00, oră Europe/Bucharest; verificare tranzacțională a conflictelor.
+- Servicii de 15–240 minute, program săptămânal per specialist, pauze și blocări/concedii. Ore Europe/Bucharest; verificare tranzacțională a suprapunerilor.
 - QR real PNG: token aleator opac, hash stocat pe server, expirare la 5 minute, o singură utilizare. Un cod nou îl invalidează pe cel vechi.
 - Check-in doar pentru profesionistul rezervat, în salonul corect, în fereastra de ±2 ore față de programare.
 - Finalizare numai după check-in. Maximum o acordare de 100 puncte per vizită, inclusiv la retrimiterea cererii.
@@ -50,7 +50,7 @@ npm run check
 npm test
 ```
 
-18 teste acoperă izolarea dintre clienți/saloane, rolurile, replay/expirare QR, finalizare idempotentă, rezervări concurente la nivel tranzacțional, recompense, fotografii, sesiuni persistente și API HTTP cu control de origine. Workflow GitHub Actions inclus.
+20 teste acoperă izolarea dintre clienți/saloane, rolurile, replay/expirare QR, finalizare idempotentă, rezervări concurente la nivel tranzacțional, recompense, fotografii, sesiuni persistente și API HTTP cu control de origine. Workflow GitHub Actions inclus.
 
 ## Test manual în cinci pași
 
@@ -74,8 +74,14 @@ Pentru Docker: construiește imaginea și montează un volum persistent la `/app
 
 ## Limitele pilotului
 
-Nu este lansare comercială publică. Autentificarea este funcțională, dar recuperarea parolei, verificarea emailului, MFA și administrarea completă a conturilor sunt următorii pași. Pilotul nu include manager/owner separat, orar configurabil, concedii, durate variabile, plăți, pachete de ședințe, abonamente între saloane, notificări, integrare cu un calendar extern, feed social, referral sau export/ștergere self-service. Nu există AI generativ conectat: recomandările afișate sunt etichetate ca reguli. Fotografiile nu sunt partajate cu alți saloane sau profesioniști în acest pilot.
+Nu este lansare comercială publică. Autentificarea este funcțională, dar recuperarea parolei, verificarea emailului, MFA și administrarea completă a conturilor sunt următorii pași. Pilotul nu include manager/owner separat, plăți, pachete de ședințe, abonamente între saloane, notificări, integrare cu un calendar extern, feed social, referral sau export/ștergere self-service. Nu există AI generativ conectat: recomandările afișate sunt etichetate ca reguli. Fotografiile nu sunt partajate cu alți saloane sau profesioniști în acest pilot.
 
 Nu există sincronizare cu Salon OS/Barbercraft sau acces la bazele lor reale. Datele pentru noul pilot sunt independente. Înaintea oricărei integrări trebuie stabilită o sursă unică a programărilor și testată autorizarea între sisteme.
 
 Vezi [arhitectura](docs/ARCHITECTURE.md), [roadmap](docs/ROADMAP.md) și [verificarea](docs/VERIFICATION.md).
+
+## Programul profesioniștilor
+
+PRO → Program configurează cele șapte zile și pauzele. Ore implicite: luni–sâmbătă 09–18, pauză 13–13:30; duminică închis. Acestea sunt valori de pornire, nu programul real confirmat al 4MEN. Modificarea orarului nu anulează programările existente. Blocările sunt respinse dacă intersectează programări active. Admin stabilește durata la adăugarea unui serviciu. Durata rezervării se salvează separat pentru a păstra istoricul.
+
+Publicarea serverului real și configurarea identității proprietarului rămân neefectuate. GitHub Pages continuă să fie doar simulatorul local.

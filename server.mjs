@@ -19,7 +19,7 @@ export function createApp({database=':memory:',demo=false,origin='',adminEmail='
    const cookies=Object.fromEntries((req.headers.cookie||'').split(';').map(c=>c.trim().split('=')));
    const user=store.getSession(cookies.sp_session);
    if(req.method==='GET' && !path.startsWith('/api/')) {
-     const file={'/':'index.html','/client':'index.html','/pro':'index.html','/admin':'index.html','/join':'index.html','/app.js':'app.js','/style.css':'style.css','/icon.svg':'icon.svg','/manifest.webmanifest':'manifest.webmanifest'}[path];
+     const file={'/':'index.html','/client':'index.html','/pro':'index.html','/admin':'index.html','/join':'index.html','/scheduling.js':'scheduling.js','/app.js':'app.js','/style.css':'style.css','/icon.svg':'icon.svg','/manifest.webmanifest':'manifest.webmanifest'}[path];
      if(!file)throw new Fault('Pagina nu există.',404);
      const type=file.endsWith('.js')?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.svg')?'image/svg+xml':file.endsWith('.webmanifest')?'application/manifest+json':'text/html';
      res.writeHead(200,{'Content-Type':type+'; charset=utf-8'});res.end(readFileSync(join(root,'public',file)));return;
@@ -46,10 +46,13 @@ export function createApp({database=':memory:',demo=false,origin='',adminEmail='
    if(path==='/api/auth/logout'&&req.method==='POST'){store.logout(cookies.sp_session);res.setHeader('Set-Cookie','sp_session=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0');return send(200,{ok:true});}
    if(!user)throw new Fault('Autentifică-te pentru a continua.',401);
    if(path==='/api/state'&&req.method==='GET')return send(200,store.state(user));
-   if(path==='/api/slots'&&req.method==='GET')return send(200,store.slots(Number(url.searchParams.get('staff')),url.searchParams.get('date')));
+   if(path==='/api/slots'&&req.method==='GET')return send(200,store.slots(Number(url.searchParams.get('staff')),url.searchParams.get('date'),Number(url.searchParams.get('service'))||undefined));
    if(req.method!=='POST')throw new Fault('Ruta nu există.',404);
    let result;
    switch(path) {
+    case '/api/schedule':result=store.setHours(user,b);break;
+    case '/api/timeoff':result=store.addTimeOff(user,b);break;
+    case '/api/timeoff/remove':result=store.removeTimeOff(user,Number(b.id));break;
     case '/api/book': result=store.book(user,b); break;
     case '/api/cancel': result=store.cancel(user,Number(b.visitId)); break;
     case '/api/checkin/token': result=store.checkinToken(user,Number(b.visitId));break;
